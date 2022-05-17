@@ -1,5 +1,6 @@
 body {
   font-family: "Oxygen", sans-serif;
+  background-size: 100% 100%;
   background-image: linear-gradient(
     320deg,
     hsl(218deg 61% 25%) 0%,
@@ -26,4 +27,19 @@ body {
     hsl(190deg 77% 74%) 100%,
     hsl(187deg 78% 81%) 100%
   );
+}
+
+.container {
+  inline-size: min(100% - 4rem, 90rem);
+  margin-inline: auto;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  grid-gap: 2rem;
+  place-items: center;
+  @media screen and (max-width: 768px) {
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  }
 }

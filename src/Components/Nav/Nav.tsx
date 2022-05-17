@@ -1,5 +1,13 @@
+import { AddCircle } from "../../Assets";
+
 const Nav = () => {
-  return <nav>Nav</nav>;
+  return (
+    <nav className="nav container">
+      <button>
+        <AddCircle />
+      </button>
+    </nav>
+  );
 };
 
 export default Nav;
