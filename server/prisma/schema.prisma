@@ -1,0 +1,46 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./timer.db"
+}
+
+model Console {
+  id       String  @id @default(cuid())
+  gpio     Int     @unique
+  name     String?
+  Windows   Windows? @relation(fields: [windowsId], references: [id])
+  windowsId Int?
+
+}
+
+model Windows {
+  id      Int       @id @default(autoincrement())
+  name    String?   @unique
+  console Console[]
+}
+
+// model Available {
+//   id   Int    @id @default(autoincrement())
+//   gpio String @unique
+//   Gpio Gpio[]
+// }
+
+// model InUse {
+//   id   Int    @id @default(autoincrement())
+//   gpio String @unique
+//   Gpio Gpio[]
+// }
+
+// model Gpio {
+//   id          String     @id @default(cuid())
+//   available   Available? @relation(fields: [availableId], references: [id])
+//   availableId Int?
+//   inUse       InUse?     @relation(fields: [inUseId], references: [id])
+//   inUseId     Int?
+// }
