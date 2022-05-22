@@ -17,6 +17,7 @@ home.post("/windows", async (req, res) => {
     },
   });
   res.json(window);
+  
 });
 
 home.post("/console", async (req, res) => {
