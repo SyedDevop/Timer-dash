@@ -1,6 +1,6 @@
 import { Router } from "express";
 import prisma from "../prisma";
-
+import "./Utils/Timer";
 const home = Router();
 
 home.get("/", async (req, res) => {
@@ -17,7 +17,6 @@ home.post("/windows", async (req, res) => {
     },
   });
   res.json(window);
-  
 });
 
 home.post("/console", async (req, res) => {
