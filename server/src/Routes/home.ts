@@ -1,9 +1,9 @@
 import { Router } from "express";
 import prisma from "../prisma";
-import "./Utils/Timer";
+// import "./Utils/Timer";
 const home = Router();
 
-home.get("/", async (req, res) => {
+home.get("/", async (_, res) => {
   const windows = await prisma.windows.findMany({ include: { console: true } });
   res.json(windows);
 });
