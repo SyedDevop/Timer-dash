@@ -5,5 +5,5 @@ export interface AddMinutesProps {
 }
 
 export interface TimerBodyProps {
-  time?: Date;
+  timeID: number | string;
 }

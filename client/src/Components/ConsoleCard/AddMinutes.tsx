@@ -3,7 +3,6 @@ import { CSSTransition } from "react-transition-group";
 
 import { RestartIcon } from "../../Assets";
 import { AddMinutesProps } from "../../@Types";
-import { useSocketContext } from "../../Hooks";
 
 export const AddMinutes = ({ state, setState, timeReset }: AddMinutesProps) => {
   const [minutes, setMinutes] = useState(0);
@@ -18,7 +17,6 @@ export const AddMinutes = ({ state, setState, timeReset }: AddMinutesProps) => {
     timeReset(new Date(Date.now() + minutes * 60 * 1000), true);
   };
 
-  // const { socket } = useSocketContext();
 
   return (
     <>

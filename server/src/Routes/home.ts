@@ -19,6 +19,17 @@ home.post("/windows", async (req, res) => {
   res.json(window);
 });
 
+home.get("/console", async (_, res) => {
+  try {
+    const console = await prisma.console.findMany();
+    res.json(console);
+  } catch (error) {
+    res.json(error);
+  } finally {
+    await prisma.$disconnect();
+  }
+});
+
 home.post("/console", async (req, res) => {
   const { name, gpio } = req.body;
   try {

@@ -19,11 +19,14 @@ export const useSocketContext = () => useContext(SocketContext);
 
 const SocketProvider = ({ children }: { children: React.ReactNode }) => {
   // const [sockets, setSockets] = useState<Socket | null>(null);
-  useEffect(() => {
-    socket.on(EVENTS.TIMER_START, (node: any) => {
-      console.log("node", node);
-    });
-  });
+  // useEffect(() => {
+  //   socket.on(EVENTS.TIMER_START, (node: any) => {
+  //     console.log("node", node);
+  //   });
+  //   return () => {
+  //     socket.off(EVENTS.TIMER_START);
+  //   };
+  // }, []);
 
   return (
     <SocketContext.Provider value={{ socket }}>
