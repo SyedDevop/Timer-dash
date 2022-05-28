@@ -1,28 +1,20 @@
-import { useState } from "react";
+import React, { useState, memo } from "react";
 import { CSSTransition } from "react-transition-group";
 
-import { RestartIcon } from "../../Assets";
 import { AddMinutesProps } from "../../@Types";
+import { useSocketContext } from "../../Hooks";
 
-export const AddMinutes = ({ state, setState, timeReset }: AddMinutesProps) => {
-  const [minutes, setMinutes] = useState(0);
-
+const AddMinutes = memo(({ state, setState, timerID }: AddMinutesProps) => {
+  const [minutes, setMinutes] = useState<string | number>(NaN);
+  const { socket } = useSocketContext();
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    timeReset(new Date(Date.now() + minutes * 60 * 1000), true);
+    socket.emit("START_TIMER", { timerID, minutes });
     setState(false);
   };
 
-  const handelRestart = () => {
-    timeReset(new Date(Date.now() + minutes * 60 * 1000), true);
-  };
-
-
   return (
     <>
-      <button className="rest-btn" onClick={handelRestart}>
-        <RestartIcon />
-      </button>
       <CSSTransition
         in={state}
         classNames="add-min"
@@ -57,4 +49,6 @@ export const AddMinutes = ({ state, setState, timeReset }: AddMinutesProps) => {
       </CSSTransition>
     </>
   );
-};
+});
+
+export { AddMinutes };

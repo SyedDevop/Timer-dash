@@ -3,5 +3,6 @@ export interface StartTimer {
     minute: number;
     seconds: number;
     hours: number;
+    state: boolean;
   };
 }

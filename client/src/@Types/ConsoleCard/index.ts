@@ -1,9 +1,10 @@
 export interface AddMinutesProps {
   state: boolean;
   setState: React.Dispatch<React.SetStateAction<boolean>>;
-  timeReset: (newExpiryTimestamp: Date, autoStart?: boolean) => void;
+  timerID: string | number;
 }
 
 export interface TimerBodyProps {
   timeID: number | string;
+  index: number;
 }

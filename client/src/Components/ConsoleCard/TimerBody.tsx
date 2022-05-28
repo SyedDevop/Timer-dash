@@ -1,76 +1,47 @@
-import { useState, useEffect } from "react";
-import { useTimer } from "react-timer-hook";
+import { useCallback } from "react";
+import { useHotkeys, isHotkeyPressed } from "react-hotkeys-hook";
 
-import { PlayIcon, PauseIcon } from "../../Assets";
 import { AddMinutes } from "./AddMinutes";
-import { toTwoDigit } from "../../Utils";
-import { StartTimer, TimerBodyProps } from "../../@Types";
-import { useSocketContext } from "../../Hooks";
+import { TimerBodyProps } from "../../@Types";
+import { TimeBlock } from "./TimeBlock";
+import { useTimerBody } from "./useTimerBody";
+import { TimerButton } from "./TimerButton";
 
-export const TimerBody = ({ timeID }: TimerBodyProps) => {
-  // const { minutes, seconds, hours, pause, restart, resume, isRunning } =
-  //   useTimer({
-  //     expiryTimestamp: new Date(),
-  //   });
+export const TimerBody = ({ timeID, index }: TimerBodyProps) => {
+  const {
+    addMinuteState,
+    handelClick,
+    handelPlayPass,
+    isRunning,
+    timeReset,
+    setAddMinuteState,
+    hours,
+    minutes,
+    seconds,
+  } = useTimerBody({ timeID });
 
-  const { socket } = useSocketContext();
-
-  const [minutes, setMinutes] = useState(0);
-  const [seconds, setSeconds] = useState(0);
-  const [hours, setHours] = useState(0);
-
-  const [addMinuteState, setAddMinuteState] = useState(false);
-
-  const handelClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    if (e.target === e.currentTarget) {
-      setAddMinuteState((pre) => !pre);
-    }
-  };
-
-  // const handelPlayPass = () => {
-  //   if (isRunning) {
-  //     pause();
-  //   } else {
-  //     resume();
-  //   }
-  // };
-
-  useEffect(() => {
-    socket.on("TIMER_START", (node: StartTimer) => {
-      setMinutes(node[timeID].minute);
-      setSeconds(node[timeID].seconds);
-      setHours(node[timeID].hours);
-    });
-
-    return () => {
-      socket.off("TIMER_START");
-    };
+  const reset = useCallback(() => {
+    timeReset();
   }, []);
+
+  const playPause = useCallback(() => {
+    handelPlayPass();
+  }, [isRunning]);
 
   return (
     <div className="card-tab__body tb-style" onClick={handelClick}>
       <div>
-        <div>
-          <span>{toTwoDigit(hours)}</span>
-          <h3>hour</h3>
-        </div>
+        <TimeBlock name="hours" time={hours} />
         <span>:</span>
-        <div>
-          <span>{toTwoDigit(minutes)}</span>
-          <h3>minutes</h3>
-        </div>
+        <TimeBlock name="minutes" time={minutes} />
         <span>:</span>
-        <div>
-          <span>{toTwoDigit(seconds)}</span>
-          <h3>seconds</h3>
-        </div>
+        <TimeBlock name="seconds" time={seconds} />
       </div>
-
-      <button>{true ? <PauseIcon /> : <PlayIcon />}</button>
+      <TimerButton {...{ isRunning }} playPause={playPause} reset={reset} />
       <AddMinutes
         state={addMinuteState}
         setState={setAddMinuteState}
-        timeReset={() => {}}
+        timerID={timeID}
       />
     </div>
   );

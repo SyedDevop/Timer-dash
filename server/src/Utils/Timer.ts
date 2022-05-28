@@ -74,7 +74,7 @@ class MyTimer {
           countdown: true,
         });
         this.timer[console.id].start({
-          startValues: { seconds: (30 + 1) * 10 },
+          startValues: { seconds: 202 },
         });
       }
       return this.timer;
@@ -83,6 +83,59 @@ class MyTimer {
       process.exit(1);
     } finally {
       await Prisma.$disconnect();
+    }
+  }
+  get currentTimersTime() {
+    interface CurrentTimersTime {
+      [key: string]: {
+        minute: number;
+        seconds: number;
+        hours: number;
+        state: boolean;
+      };
+    }
+    const timers: CurrentTimersTime = {} as CurrentTimersTime;
+    for (const time in this.timer) {
+      timers[time] = {
+        minute: this.timer[time].getTimeValues().minutes,
+        seconds: this.timer[time].getTimeValues().seconds,
+        hours: this.timer[time].getTimeValues().hours,
+        state: this.timer[time].isRunning(),
+      };
+    }
+    return timers;
+  }
+
+  getUpdateTimers(
+    timeType: "secondsUpdated" | "minutesUpdated" | "hoursUpdated",
+    callback: (id: string) => void
+  ) {
+    for (const timer in this.timer) {
+      this.timer[timer].addEventListener(timeType, () => {
+        callback(timer);
+      });
+    }
+  }
+
+  setTimerActions(
+    timerId: string,
+    action: "start" | "pause" | "stop" | "reset"
+  ) {
+    this.timer[timerId][action]();
+    return this.timer[timerId].isRunning();
+  }
+
+  startTimer(timerId: string, minute: number) {
+    this.timer[timerId].start({
+      startValues: { minutes: minute },
+    });
+  }
+
+  test() {
+    for (const timer in this.timer) {
+      this.timer[timer].addEventListener("targetAchieved", () => {
+        console.log(timer, "done");
+      });
     }
   }
 }

@@ -2,7 +2,10 @@ import { MenuIcon } from "../../Assets";
 import { TimerBody } from "./TimerBody";
 import { ConsolesApi } from "../../@Types";
 
-const ConsoleCars = ({ name, id }: ConsolesApi) => {
+interface ConsoleCars extends ConsolesApi {
+  index: number;
+}
+const ConsoleCars = ({ name, id, index }: ConsoleCars) => {
   return (
     <div className="card-tab">
       <div className="card-tab__head">
@@ -14,7 +17,7 @@ const ConsoleCars = ({ name, id }: ConsolesApi) => {
           <MenuIcon />
         </button>
       </div>
-      <TimerBody timeID={id} />
+      <TimerBody timeID={id} index={index} />
       <button className="delete-btn">Delete Tab</button>
     </div>
   );
