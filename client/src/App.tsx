@@ -1,7 +1,7 @@
 import Nav from "./Components/Nav/Nav";
 import ConsoleCard from "./Components/ConsoleCard";
 import SocketProvider from "./Hooks/useSocketContext";
-import Home from "./Pages/home";
+import Home from "./Pages/Home";
 
 function App() {
   return (

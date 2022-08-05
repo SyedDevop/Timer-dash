@@ -1,43 +1,45 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 
-axios.defaults.baseURL = "http://localhost:3001";
+// axios.defaults.baseURL = "http://localhost:3001/";
+const myAxios = axios.create({
+  baseURL: "http://localhost:3001",
+  headers: {
+    accept: "application/json, text/plain, */*",
+    "Content-Type": "application/json",
+  },
+});
+//If you are using different URLs, consider removing this line and adding a baseURL in the Axios Config parameter.
 
-interface UseAxiosReturn {
-  response: null;
-  error: string;
-  loading: boolean;
-}
+const useAxios = <T>(axiosParams: AxiosRequestConfig) => {
+  const [response, setResponse] = useState<AxiosResponse<T>>();
+  const [error, setError] = useState<AxiosError>();
+  const [loading, setLoading] = useState(
+    axiosParams.method === "GET" || axiosParams.method === "get"
+  );
 
-type Url = "/console";
+  const fetchData = async (params: AxiosRequestConfig) => {
+    try {
+      const res = await myAxios.request<T>(params);
+      setResponse(res);
+    } catch (err: any) {
+      setError(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-function useAxios(url: Url, media: "get"): UseAxiosReturn;
-function useAxios(url: Url, media: "post", data: any): UseAxiosReturn;
-function useAxios(url: Url, method: "get" | "post", data?: any) {
-  const [response, setResponse] = useState(null);
-  const [error, setError] = useState("");
-  const [loading, setloading] = useState(true);
-
-  const fetchData = () => {
-    axios
-      // .[method](url)
-      // .then((res) => {
-      //   setResponse(res.data);
-      // })
-      // .catch((err) => {
-      //   setError(err);
-      // })
-      // .finally(() => {
-      //   setloading(false);
-      // });
+  const sendData = () => {
+    fetchData(axiosParams);
   };
 
   useEffect(() => {
-    fetchData();
+    if (axiosParams.method === "GET" || axiosParams.method === "get") {
+      fetchData(axiosParams);
+    }
   }, []);
 
-  // custom hook returns value
-  return { response, error, loading };
-}
+  return { response, error, loading, sendData };
+};
 
 export { useAxios };

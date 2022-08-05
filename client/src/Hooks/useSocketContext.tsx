@@ -4,6 +4,7 @@ import io, { Socket } from "socket.io-client";
 const socket = io("http://localhost:3001");
 interface SocketContextValue {
   socket: Socket;
+  startingData?: any;
 }
 
 const EVENTS = {
@@ -18,15 +19,17 @@ const SocketContext = createContext<SocketContextValue>({
 export const useSocketContext = () => useContext(SocketContext);
 
 const SocketProvider = ({ children }: { children: React.ReactNode }) => {
-  // const [sockets, setSockets] = useState<Socket | null>(null);
+  // const [startingData, setStartingData] = useState<any>();
   // useEffect(() => {
   //   socket.on(EVENTS.TIMER_START, (node: any) => {
-  //     console.log("node", node);
+  //     setStartingData(node);
+  //     console.log("startingData", startingData);
   //   });
   //   return () => {
   //     socket.off(EVENTS.TIMER_START);
   //   };
   // }, []);
+  // console.log({ socket });
 
   return (
     <SocketContext.Provider value={{ socket }}>

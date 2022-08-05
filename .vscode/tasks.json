@@ -1,16 +1,15 @@
 {
 	"version": "2.0.0",
 	"tasks": [
-		// Client tasks
 		{
 			"type": "shell",
 			"label": "Start Client",
 			"command": "yarn dev",
 			"options": {
 				"cwd": "${workspaceRoot}/client",
-				"showOutput": "always",
+				"showOutput": "always"
 			},
-			"group": "test",
+			"group": "test"
 		},
 		{
 			"type": "shell",
@@ -18,20 +17,19 @@
 			"command": "yarn dev --host",
 			"options": {
 				"cwd": "${workspaceRoot}/client",
-				"showOutput": "always",
+				"showOutput": "always"
 			},
-			"group": "test",
+			"group": "test"
 		},
-		//Server Tasks
 		{
 			"type": "shell",
 			"label": "Start Server",
 			"command": "yarn start",
 			"options": {
 				"cwd": "${workspaceRoot}/server",
-				"showOutput": "always",
+				"showOutput": "always"
 			},
-			"group": "test",
+			"group": "test"
 		},
 		{
 			"label": "Start Database ui",
@@ -39,9 +37,9 @@
 			"command": "npx prisma studio",
 			"options": {
 				"cwd": "${workspaceRoot}/server/prisma",
-				"showOutput": "always",
+				"showOutput": "always"
 			},
-			"group": "test",
+			"group": "test"
 		},
 		{
 			"label": "Migrate Prisma Schema",
@@ -49,9 +47,10 @@
 			"command": "npx prisma migrate dev --name init",
 			"options": {
 				"cwd": "${workspaceRoot}/server/prisma",
-				"showOutput": "always",
+				"showOutput": "always"
 			},
 			"group": "test",
+			"problemMatcher": []
 		}
 	]
 }

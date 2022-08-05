@@ -3,9 +3,10 @@ import { CSSTransition } from "react-transition-group";
 
 import { AddMinutesProps } from "../../@Types";
 import { useSocketContext } from "../../Hooks";
+import Button from "../Ui/Button/Button";
 
 const AddMinutes = memo(({ state, setState, timerID }: AddMinutesProps) => {
-  const [minutes, setMinutes] = useState<string | number>(NaN);
+  const [minutes, setMinutes] = useState<string>("");
   const { socket } = useSocketContext();
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -29,21 +30,20 @@ const AddMinutes = memo(({ state, setState, timerID }: AddMinutesProps) => {
               placeholder="Min"
               value={minutes}
               onChange={(e) => {
-                setMinutes(Number(e.target.value));
+                setMinutes(e.target.value);
               }}
               autoFocus
+              className="primary__input"
             />
-            <button type="submit" className="start-btn">
-              start
-            </button>
-            <button
-              type="button"
+            <Button type="submit">start</Button>
+            <Button
+              textColor="red"
               onClick={() => {
                 setState((pre) => !pre);
               }}
             >
               cancel
-            </button>
+            </Button>
           </form>
         </div>
       </CSSTransition>

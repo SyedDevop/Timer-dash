@@ -1,70 +1,6 @@
-// // const [minutes, setMinutes] = useState(0);
-// // const [seconds, setSeconds] = useState(0);
-// // const [hours, setHours] = useState(0);
-
 import { useEffect, useState } from "react";
 import { StartTimer } from "../../@Types";
 import { useSocketContext } from "../../Hooks";
-import { toTwoDigit } from "../../Utils";
-
-// const refIsNotNull = async () => {
-//   const res = await Promise.all([
-//     hoursRef.current,
-//     minutesRef.current,
-//     secondsRef.current,
-//   ]);
-//   return res;
-// };
-
-// useEffect(() => {
-//   refIsNotNull();
-//   socket.on("TIMER_START", (node: StartTimer) => {
-//     if (hoursRef.current) {
-//       hoursRef.current.textContent = `${toTwoDigit(node[timeID].hours)}`;
-//     }
-//     if (minutesRef.current) {
-//       minutesRef.current.textContent = `${toTwoDigit(node[timeID].minute)}`;
-//     }
-//     if (secondsRef.current) {
-//       secondsRef.current.textContent = `${toTwoDigit(node[timeID].seconds)}`;
-//     }
-//     setIsRunning(node[timeID].state);
-//     console.log(node[timeID].hours);
-//   });
-
-//   return () => {
-//     socket.off("TIMER_START");
-//     refIsNotNull();
-//   };
-// }, [hoursRef, minutesRef, secondsRef]);
-
-// useEffect(() => {
-//   socket.on(`${timeID}seconds`, (second: number) => {
-//     if (secondsRef.current) {
-//       secondsRef.current.textContent = `${toTwoDigit(second)}`;
-//     }
-//   });
-//   socket.on(`${timeID}minutes`, (minutes: number) => {
-//     if (minutesRef.current) {
-//       minutesRef.current.textContent = `${toTwoDigit(minutes)}`;
-//     }
-//   });
-//   socket.on(`${timeID}hours`, (hours: number) => {
-//     if (hoursRef.current) {
-//       hoursRef.current.textContent = `${toTwoDigit(hours)}`;
-//     }
-//   });
-//   socket.on(`${timeID}state`, (state: boolean) => {
-//     setIsRunning(state);
-//     console.log(state);
-//   });
-//   return () => {
-//     socket.off(`${timeID}seconds`);
-//     socket.off(`${timeID}minutes`);
-//     socket.off(`${timeID}hours`);
-//     socket.off(`${timeID}state`);
-//   };
-// }, []);
 
 const useTimerBody = ({ timeID }: { timeID: string | number }) => {
   const { socket } = useSocketContext();
@@ -81,7 +17,6 @@ const useTimerBody = ({ timeID }: { timeID: string | number }) => {
   };
 
   const handelPlayPass = () => {
-    console.log({ isRunning });
     if (isRunning) {
       socket.emit("SET_TIMER_ACTION", { id: timeID, action: "pause" });
     } else {
@@ -94,19 +29,6 @@ const useTimerBody = ({ timeID }: { timeID: string | number }) => {
   };
 
   useEffect(() => {
-    socket.on("TIMER_START", (node: StartTimer) => {
-      setHours(node[timeID].hours);
-      setMinutes(node[timeID].minute);
-      setSeconds(node[timeID].seconds);
-      setIsRunning(node[timeID].state);
-      console.log(node);
-    });
-
-    return () => {
-      socket.off("TIMER_START");
-    };
-  }, []);
-  useEffect(() => {
     socket.on(`${timeID}hours`, (hours: number) => {
       setHours(hours);
     });
@@ -116,11 +38,27 @@ const useTimerBody = ({ timeID }: { timeID: string | number }) => {
     socket.on(`${timeID}seconds`, (second: number) => {
       setSeconds(second);
     });
+    socket.on(`${timeID}state`, (state: boolean) => {
+      setIsRunning(state);
+    });
     return () => {
       socket.off(`${timeID}seconds`);
       socket.off(`${timeID}minutes`);
       socket.off(`${timeID}hours`);
       socket.off(`${timeID}state`);
+    };
+  }, []);
+
+  useEffect(() => {
+    socket.emit(`TIMER_START${timeID}`, (data: any) => {
+      console.log({ data });
+      setIsRunning(data.state);
+      setMinutes(data.minute);
+      setSeconds(data.seconds);
+      setHours(data.hours);
+    });
+    return () => {
+      socket.off(`TIMER_START${timeID}`);
     };
   }, []);
 

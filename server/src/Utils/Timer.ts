@@ -1,81 +1,29 @@
-import Timer from "easytimer.js";
+import Timer, { TimerEventType } from "easytimer.js";
 // import { PrismaClient } from "@prisma/client";
 import Prisma from "../prisma";
-// declare module "easytimer.js" {
-//   interface Timer {
-//     name?: string;
-//   }
-// }
+// import { IMyTimer, UpdateTImerType } from "../@types/Timer";
 
-// await new Prisma.console.
-
-// interface Timers extends Record<string, Timer> {
-//   [key: string]: Timer;
-// }
-
-// const timers = async () => {
-//   try {
-//     const data = await Prisma.console.findMany();
-//     const times: Timers = {};
-//     for (let console of data) {
-//       times[console.id] = new Timer();
-//     }
-//     console.log("GET", times);
-
-//     return times;
-//   } catch (error) {
-//     console.log(error);
-//     process.exit(1);
-//   } finally {
-//     await Prisma.$disconnect();
-//   }
-// };
-
-// // const timerst: Record<string, Timer> = {
-// //   timer1: new Timer({ countdown: true }),
-// //   timer2: new Timer({ countdown: true }),
-// //   timer3: new Timer({ countdown: true }),
-// //   timer4: new Timer({ countdown: true }),
-// //   timer5: new Timer({ countdown: true }),
-// // };
-// // console.log(timerst );
-
-// // for (const timer in timers) {
-// //   timers[timer].start({
-// //     startValues: { seconds: 30 },
-// //   });
-// //   // timers[timer].name = timer;
-// // }
-
-// // for (const timer of Object.values(timers)) {
-// //   timer.addEventListener("secondsUpdated", ({ detail }) => {
-// //     console.log(timer.getTimeValues().toString());
-// //   });
-// //   console.log("start");
-// // }
-
-// export { timers };
-
-interface MyTimer {
-  timer: { [key: string]: Timer };
-}
+export type UpdateTImerType =
+  | "secondsUpdated"
+  | "minutesUpdated"
+  | "hoursUpdated";
+export type setTimerActionsType = "start" | "pause" | "reset";
 class MyTimer {
+  timer: { [key: string]: Timer };
+  timerName: { [key: string]: string | null };
   constructor() {
     this.timer = {};
+    this.timerName = {};
     this.init();
   }
   private async init() {
     try {
       const data = await Prisma.console.findMany();
-      let i = 0;
       for (let console of data) {
-        i++;
         this.timer[console.id] = new Timer({
           countdown: true,
         });
-        this.timer[console.id].start({
-          startValues: { seconds: 202 },
-        });
+        this.timerName[console.id] = console.name;
       }
       return this.timer;
     } catch (error) {
@@ -106,35 +54,67 @@ class MyTimer {
     return timers;
   }
 
-  getUpdateTimers(
-    timeType: "secondsUpdated" | "minutesUpdated" | "hoursUpdated",
+  public getUpdateTimers(
+    timeType: UpdateTImerType,
     callback: (id: string) => void
-  ) {
+  ): void;
+  // @ts-ignore
+  public getUpdateTimers(
+    timeType: "targetAchieved",
+    callback: (id: string, currentState: boolean) => void
+  ): void;
+  public getUpdateTimers(
+    timeType: UpdateTImerType | "targetAchieved",
+    callback: (id: string, currentState?: boolean) => void
+  ): void {
     for (const timer in this.timer) {
       this.timer[timer].addEventListener(timeType, () => {
-        callback(timer);
+        if (timeType === "targetAchieved") {
+          callback(timer, this.timer[timer].isRunning());
+        } else {
+          callback(timer);
+        }
       });
     }
   }
 
-  setTimerActions(
-    timerId: string,
-    action: "start" | "pause" | "stop" | "reset"
-  ) {
+  public setTimerActions(timerId: string, action: setTimerActionsType) {
     this.timer[timerId][action]();
     return this.timer[timerId].isRunning();
   }
 
-  startTimer(timerId: string, minute: number) {
+  public startTimer(timerId: string, minute: number) {
     this.timer[timerId].start({
       startValues: { minutes: minute },
     });
+    return this.timer[timerId].isRunning();
   }
 
-  test() {
+  // public unSubscribe(event: TimerEventType) {
+  //   for (const timer in this.timer) {
+  //     this.timer[timer].removeEventListener(event, () => {
+  //       console.log("unsubscribe");
+  //     });
+  //   }
+  // }
+
+  public addEventListener(
+    event: TimerEventType,
+    id: string,
+    callback?: (id: string) => void
+  ) {
+    this.timer[id].addEventListener(event, () => {
+      console.log(id, "done");
+      if (callback !== undefined) {
+        callback(id);
+      }
+    });
+  }
+
+  public test() {
     for (const timer in this.timer) {
       this.timer[timer].addEventListener("targetAchieved", () => {
-        console.log(timer, "done");
+        console.log(this.timerName[timer], "done");
       });
     }
   }

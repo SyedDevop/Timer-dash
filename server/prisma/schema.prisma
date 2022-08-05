@@ -13,34 +13,25 @@ datasource db {
 model Console {
   id        String   @id @default(cuid())
   gpio      Int      @unique
-  name      String?
+  name      String
   Windows   Windows? @relation(fields: [windowsId], references: [id])
   windowsId Int?
-
+  Gpio      Gpio[]
 }
 
 model Windows {
   id      Int       @id @default(autoincrement())
   name    String?   @unique
   console Console[]
+  Gpio    Gpio[]
 }
 
-// model Available {
-//   id   Int    @id @default(autoincrement())
-//   gpio String @unique
-//   Gpio Gpio[]
-// }
-
-// model InUse {
-//   id   Int    @id @default(autoincrement())
-//   gpio String @unique
-//   Gpio Gpio[]
-// }
-
-// model Gpio {
-//   id          String     @id @default(cuid())
-//   available   Available? @relation(fields: [availableId], references: [id])
-//   availableId Int?
-//   inUse       InUse?     @relation(fields: [inUseId], references: [id])
-//   inUseId     Int?
-// }
+model Gpio {
+  id        Int      @id @unique @default(autoincrement())
+  io        Int      @unique
+  available Boolean  @default(true)
+  Console   Console? @relation(fields: [consoleId], references: [id])
+  consoleId String?
+  windows   Windows? @relation(fields: [windowsId], references: [id])
+  windowsId Int?
+}

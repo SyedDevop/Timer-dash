@@ -1,5 +1,4 @@
 import { useCallback } from "react";
-import { useHotkeys, isHotkeyPressed } from "react-hotkeys-hook";
 
 import { AddMinutes } from "./AddMinutes";
 import { TimerBodyProps } from "../../@Types";
@@ -20,6 +19,11 @@ export const TimerBody = ({ timeID, index }: TimerBodyProps) => {
     seconds,
   } = useTimerBody({ timeID });
 
+  const submit = useCallback(
+    (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+      handelClick(e);
+    },[]);
+
   const reset = useCallback(() => {
     timeReset();
   }, []);
@@ -29,7 +33,7 @@ export const TimerBody = ({ timeID, index }: TimerBodyProps) => {
   }, [isRunning]);
 
   return (
-    <div className="card-tab__body tb-style" onClick={handelClick}>
+    <div className="card-tab__body tb-style" onClick={submit}>
       <div>
         <TimeBlock name="hours" time={hours} />
         <span>:</span>
