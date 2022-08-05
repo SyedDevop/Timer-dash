@@ -13,7 +13,7 @@ const ConsoleCars = ({ name, id, index }: ConsoleCars) => {
           <h4>Timer</h4>
           <h2>{name}</h2>
         </div>
-        <button>
+        <button aria-label="console car setting">
           <MenuIcon />
         </button>
       </div>
