@@ -19,7 +19,7 @@ const AddMinutes = memo(({ state, setState, timerID }: AddMinutesProps) => {
       <CSSTransition
         in={state}
         classNames="add-min"
-        timeout={100}
+        timeout={700}
         unmountOnExit
         mountOnEnter
       >

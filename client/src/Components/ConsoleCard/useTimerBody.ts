@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { StartTimer } from "../../@Types";
 import { useSocketContext } from "../../Hooks";
 
 const useTimerBody = ({ timeID }: { timeID: string | number }) => {

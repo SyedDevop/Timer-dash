@@ -4,7 +4,7 @@
   justify-content: end;
   padding-block: 1em;
   height: 112px;
-  button {
+  > button {
     background-color: var(--clr-blue-900);
     border-radius: 50%;
     padding: 0;
