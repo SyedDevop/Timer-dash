@@ -1,4 +1,4 @@
-import React, { useState, useCallback, FC } from "react";
+import React, { FC } from "react";
 import { CSSTransition } from "react-transition-group";
 import CloseIcon from "@mui/icons-material/Close";
 type Props = {

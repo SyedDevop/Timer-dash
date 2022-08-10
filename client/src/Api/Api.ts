@@ -1,6 +1,11 @@
+import axios from "axios";
 import { ConsolesApi } from "../@Types";
 
-export const fetchConsoles = async (): Promise<ConsolesApi[]> => {
-  const res = await fetch("http://192.168.1.120:3001/console");
-  return res.json();
+const myAxios = axios.create({
+  baseURL: "http://localhost:3001",
+});
+
+export const fetchConsoles = async () => {
+  const res = await myAxios.get<ConsolesApi[]>("/console");
+  return res.data;
 };

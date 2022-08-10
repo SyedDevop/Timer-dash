@@ -4,7 +4,7 @@ import { Modal } from "../Modal";
 import ConsoleForm from "../NewConsole/ConsoleForm";
 
 const Nav = () => {
-  const [modalToggle, setModalToggle] = useState(true);
+  const [modalToggle, setModalToggle] = useState(false);
   function toggleModule() {
     setModalToggle((pre) => !pre);
     console.log("close");

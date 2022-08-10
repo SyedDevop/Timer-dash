@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 
 import ConsoleCard from "../Components/ConsoleCard";
 import { fetchConsoles } from "../Api";
-import { ConsolesApi } from "../@Types";
 import { useQuery } from "@tanstack/react-query";
 
 type Props = {};
