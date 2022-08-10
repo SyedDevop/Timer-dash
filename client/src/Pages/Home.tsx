@@ -1,19 +1,17 @@
 import React, { useEffect, useState } from "react";
 
 import ConsoleCard from "../Components/ConsoleCard";
-import { useAxios } from "../Hooks";
+import { fetchConsoles } from "../Api";
 import { ConsolesApi } from "../@Types";
+import { useQuery } from "@tanstack/react-query";
 
 type Props = {};
 
 const Home = (props: Props) => {
-  const { error, loading, response } = useAxios<ConsolesApi[]>({
-    url: "/console",
-    method: "GET",
-  });
+  const { data } = useQuery(["console"], fetchConsoles);
   return (
     <div className="container grid">
-      {response?.data.map((console, index) => (
+      {data?.map((console, index) => (
         <ConsoleCard key={console.id} {...console} index={index} />
       ))}
     </div>

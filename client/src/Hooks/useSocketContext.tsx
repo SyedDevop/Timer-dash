@@ -1,7 +1,7 @@
 import { useContext, createContext, useState, useEffect } from "react";
 import io, { Socket } from "socket.io-client";
 
-const socket = io("http://localhost:3001");
+const socket = io("http://192.168.1.120:3001");
 interface SocketContextValue {
   socket: Socket;
   startingData?: any;
