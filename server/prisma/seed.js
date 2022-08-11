@@ -1,77 +1,93 @@
 import { PrismaClient } from "@prisma/client";
 
 const consoles = [
-  { gpio: 1, name: "Console Number 1", windowsId: 1 },
-  { gpio: 2, name: "Console Number 2", windowsId: 1 },
-  { gpio: 3, name: "Console Number 3", windowsId: 1 },
-  { gpio: 4, name: "Console Number 4", windowsId: 1 },
+  { gpio: 4, name: "Console Number 1", windowsId: 1 },
+  { gpio: 17, name: "Console Number 2", windowsId: 1 },
+  { gpio: 27, name: "Console Number 3", windowsId: 1 },
+  { gpio: 22, name: "Console Number 4", windowsId: 1 },
   { gpio: 5, name: "Console Number 5", windowsId: 1 },
 ];
 
 const gpios = [
   {
     io: 4,
-    available: true,
+    available: false,
+    windowsId: 1,
   },
   {
     io: 17,
-    available: true,
+    available: false,
+    windowsId: 1,
   },
   {
     io: 27,
-    available: true,
+    available: false,
+    windowsId: 1,
   },
   {
     io: 22,
-    available: true,
+    available: false,
+    windowsId: 1,
   },
   {
     io: 5,
-    available: true,
+    available: false,
+    windowsId: 1,
   },
   {
     io: 6,
     available: true,
+    windowsId: 1,
   },
   {
     io: 13,
     available: true,
+    windowsId: 1,
   },
   {
     io: 19,
     available: true,
+    windowsId: 1,
   },
   {
     io: 26,
     available: true,
+    windowsId: 1,
   },
   {
     io: 21,
     available: true,
+    windowsId: 1,
   },
   {
     io: 20,
     available: true,
+    windowsId: 1,
   },
   {
     io: 16,
     available: true,
+    windowsId: 1,
   },
   {
     io: 12,
     available: true,
+    windowsId: 1,
   },
   {
     io: 25,
     available: true,
+    windowsId: 1,
   },
   {
     io: 23,
     available: true,
+    windowsId: 1,
   },
   {
     io: 24,
     available: true,
+    windowsId: 1,
   },
 ];
 
@@ -83,14 +99,23 @@ async function main() {
       name: "Window 1",
     },
   });
-  for (let console of consoles) {
-    await prisma.console.create({
-      data: console,
-    });
-  }
   for (let gpio of gpios) {
     await prisma.gpio.create({
       data: gpio,
+    });
+  }
+  for (let console of consoles) {
+    const res = await prisma.console.create({
+      data: console,
+    });
+    res.id;
+    await prisma.gpio.update({
+      where: {
+        io: console.gpio,
+      },
+      data: {
+        consoleId: res.id,
+      },
     });
   }
 }
