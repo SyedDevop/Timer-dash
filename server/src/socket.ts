@@ -1,4 +1,5 @@
 import { Server, Socket } from "socket.io";
+import { log } from "./logger";
 import MyTimer, { setTimerActionsType } from "./Utils/Timer";
 
 interface SetNode {
@@ -16,13 +17,13 @@ const EVENTS = {
 };
 
 const socket = async ({ io }: { io: Server }) => {
-  console.log("Socket enabled");
+  log.info("Socket enabled");
   const timer = new MyTimer();
   setTimeout(() => {
     timer.test();
   }, 1000);
   io.on("connection", (socket) => {
-    console.log("User connected ID:", socket.id);
+    log.info(`User connected ID: ${socket.id}`);
     // Event to emit the current time to new connected user.
     for (const timeId in timer.currentTimersTime) {
       socket.on(EVENTS.TIMER_START + timeId, (callbackFn) => {

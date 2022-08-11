@@ -1,4 +1,5 @@
 import Timer, { TimerEventType } from "easytimer.js";
+import { log } from "../logger";
 // import { PrismaClient } from "@prisma/client";
 import Prisma from "../prisma";
 // import { IMyTimer, UpdateTImerType } from "../@types/Timer";
@@ -27,7 +28,7 @@ class MyTimer {
       }
       return this.timer;
     } catch (error) {
-      console.log(error);
+      log.error(error);
       process.exit(1);
     } finally {
       await Prisma.$disconnect();
@@ -104,7 +105,7 @@ class MyTimer {
     callback?: (id: string) => void
   ) {
     this.timer[id].addEventListener(event, () => {
-      console.log(id, "done");
+      log.info(id, "done");
       if (callback !== undefined) {
         callback(id);
       }
@@ -114,7 +115,7 @@ class MyTimer {
   public test() {
     for (const timer in this.timer) {
       this.timer[timer].addEventListener("targetAchieved", () => {
-        console.log(this.timerName[timer], "done");
+        log.info(this.timerName[timer], "done");
       });
     }
   }
