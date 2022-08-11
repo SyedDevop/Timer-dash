@@ -1,17 +1,17 @@
 import express from "express";
 import { createServer } from "http";
 import { Server } from "socket.io";
-
-import prisma from "./prisma";
-import { home } from "./Routes/home";
-import socket from "./socket";
-
 import cors from "cors";
+
+import { log } from "./logger";
+import socket from "./socket";
+import routes from "./routes";
 
 const PORT = process.env.PORT || 3001;
 
 const app = express();
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
 const server = createServer(app);
@@ -22,9 +22,8 @@ const io = new Server(server, {
   },
 });
 
-app.use("/", home);
-
 server.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  log.info(`Server is running on port ${PORT}`);
   socket({ io });
+  routes(app);
 });
