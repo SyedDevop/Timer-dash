@@ -16,7 +16,7 @@ model Console {
   name      String
   Windows   Windows? @relation(fields: [windowsId], references: [id])
   windowsId Int?
-  Gpio      Gpio[]
+  Gpio      Gpio?
 }
 
 model Windows {
@@ -31,7 +31,7 @@ model Gpio {
   io        Int      @unique
   available Boolean  @default(true)
   Console   Console? @relation(fields: [consoleId], references: [id])
-  consoleId String?
+  consoleId String?  @unique
   windows   Windows? @relation(fields: [windowsId], references: [id])
   windowsId Int?
 }

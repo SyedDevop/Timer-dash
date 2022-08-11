@@ -1,11 +1,21 @@
 import axios from "axios";
-import { ConsolesApi } from "../@Types";
+import { ConsolesApi, GpiosApi } from "../@Types";
 
 const myAxios = axios.create({
-  baseURL: "http://localhost:3001",
+  baseURL: "http://localhost:3001/api",
 });
 
+type FetchConsoles = Array<ConsolesApi & { Gpio: GpiosApi }>;
 export const fetchConsoles = async () => {
-  const res = await myAxios.get<ConsolesApi[]>("/console");
+  const res = await myAxios.get<FetchConsoles>("/consoles", {
+    params: { gpio: true },
+  });
+  return res.data;
+};
+
+export const fetchGpios = async () => {
+  const res = await myAxios.get<GpiosApi[]>("/gpios", {
+    params: { available: true },
+  });
   return res.data;
 };
