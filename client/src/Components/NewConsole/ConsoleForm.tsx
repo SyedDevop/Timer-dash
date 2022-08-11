@@ -34,12 +34,16 @@ const parseGpios = (data: GpiosApi[]) => {
   });
 };
 const parseWindows = (data: GpiosApi[]) => {
-  return data.map((item) => {
+  const windows = data.map((item) => {
     return {
       value: item.windows?.id.toString() || "",
       label: `Window ${item.windows?.id}`,
     };
   });
+  return windows.filter(
+    (value, index, self) =>
+      index === self.findIndex((item) => item.value === value.value)
+  );
 };
 const ConsoleForm = ({ close }: Props) => {
   const { data, isLoading, isError } = useQuery(["gpio"], fetchGpios);
