@@ -32,14 +32,14 @@ export const TimerButton = memo(
   }
 );
 
-export interface Button {
+export interface ButtonProp {
   className?: string | "";
   onClick?: () => void;
   children?: React.ReactNode;
   rest?: any;
 }
 
-export const Button: FC<Button> = memo(
+export const Button: FC<ButtonProp> = memo(
   ({ className, onClick, children, rest }) => {
     return (
       <button className={className} onClick={onClick} {...rest}>

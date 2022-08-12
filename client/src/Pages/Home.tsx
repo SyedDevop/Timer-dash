@@ -1,5 +1,3 @@
-import React, { useEffect, useState } from "react";
-
 import ConsoleCard from "../Components/ConsoleCard";
 import { fetchConsoles } from "../Api";
 import { useQuery } from "@tanstack/react-query";

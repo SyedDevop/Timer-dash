@@ -16,7 +16,7 @@ const EVENTS = {
   START_TIMER: "START_TIMER",
 };
 
-const socket = async ({ io }: { io: Server }) => {
+const sockets = ({ io }: { io: Server }) => {
   log.info("Socket enabled");
   const timer = new MyTimer();
   setTimeout(() => {
@@ -26,7 +26,7 @@ const socket = async ({ io }: { io: Server }) => {
     log.info(`User connected ID: ${socket.id}`);
     // Event to emit the current time to new connected user.
     for (const timeId in timer.currentTimersTime) {
-      socket.on(EVENTS.TIMER_START + timeId, (callbackFn) => {
+      socket.on(EVENTS.TIMER_START + timeId, (callbackFn: any) => {
         callbackFn({
           hours: timer.currentTimersTime[timeId].hours,
           minute: timer.currentTimersTime[timeId].minute,
@@ -60,13 +60,16 @@ const socket = async ({ io }: { io: Server }) => {
       }
     );
     // Event to start a new timer
-    socket.on(EVENTS.START_TIMER, ({ timerID, minutes }) => {
-      timer.timer[timerID].stop();
-      const isRunning = timer.startTimer(timerID, minutes);
-      io.emit(`${timerID}state`, isRunning);
-      emitCurrentTime(socket, timerID, timer);
-    });
-    socket.on(EVENTS.SET_NODE, ({ gpio, value }: SetNode) => {});
+    socket.on(
+      EVENTS.START_TIMER,
+      ({ timerID, minutes }: { timerID: string; minutes: number }) => {
+        timer.timer[timerID].stop();
+        const isRunning = timer.startTimer(timerID, minutes);
+        io.emit(`${timerID}state`, isRunning);
+        emitCurrentTime(socket, timerID, timer);
+      }
+    );
+    // socket.on(EVENTS.SET_NODE, ({ gpio, value }: SetNode) => {});
   });
   // timer.test();
 };
@@ -76,4 +79,4 @@ function emitCurrentTime(socket: Socket, timerId: string, timer: MyTimer) {
   socket.emit(`${timerId}hours`, timer.currentTimersTime[timerId].hours);
 }
 
-export default socket;
+export default sockets;

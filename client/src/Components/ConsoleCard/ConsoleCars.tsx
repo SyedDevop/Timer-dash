@@ -2,10 +2,10 @@ import { MenuIcon } from "../../Assets";
 import { TimerBody } from "./TimerBody";
 import { ConsolesApi } from "../../@Types";
 
-interface ConsoleCars extends ConsolesApi {
+interface ConsoleCarsProps extends ConsolesApi {
   index: number;
 }
-const ConsoleCars = ({ name, id, index }: ConsoleCars) => {
+const ConsoleCars = ({ name, id, index }: ConsoleCarsProps) => {
   return (
     <div className="card-tab">
       <div className="card-tab__head">

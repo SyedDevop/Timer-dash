@@ -1,4 +1,4 @@
-import { useContext, createContext, useState, useEffect } from "react";
+import { useContext, createContext } from "react";
 import io, { Socket } from "socket.io-client";
 
 const socket = io("http://192.168.1.4:3001");
@@ -7,10 +7,10 @@ interface SocketContextValue {
   startingData?: any;
 }
 
-const EVENTS = {
-  SET_NODE: "SET_NODE",
-  TIMER_START: "TIMER_START",
-};
+// const EVENTS = {
+//   SET_NODE: "SET_NODE",
+//   TIMER_START: "TIMER_START",
+// };
 
 const SocketContext = createContext<SocketContextValue>({
   socket: null as any,

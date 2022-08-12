@@ -4,7 +4,7 @@ import { Server } from "socket.io";
 import cors from "cors";
 
 import { log } from "./logger";
-import socket from "./socket";
+import sockets from "./socket";
 import routes from "./routes";
 
 const PORT = process.env.PORT || 3001;
@@ -24,6 +24,6 @@ const io = new Server(server, {
 
 server.listen(PORT, () => {
   log.info(`Server is running on port ${PORT}`);
-  socket({ io });
+  sockets({ io });
   routes(app);
 });

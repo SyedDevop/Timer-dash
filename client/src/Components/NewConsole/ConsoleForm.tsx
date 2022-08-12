@@ -19,11 +19,11 @@ type Props = {
 //   { value: "28", label: "Gpio 28" },
 //   { value: "29", label: "Gpio 29" },
 // ];
-const windowNo = [
-  { value: "1", label: "Window 1" },
-  { value: "2", label: "Window 2" },
-  { value: "3", label: "Window 3" },
-];
+// const windowNo = [
+//   { value: "1", label: "Window 1" },
+//   { value: "2", label: "Window 2" },
+//   { value: "3", label: "Window 3" },
+// ];
 
 const parseGpios = (data: GpiosApi[]) => {
   return data.map((item) => {
@@ -46,7 +46,7 @@ const parseWindows = (data: GpiosApi[]) => {
   );
 };
 const ConsoleForm = ({ close }: Props) => {
-  const { data, isLoading, isError } = useQuery(["gpio"], fetchGpios);
+  const { data, isLoading } = useQuery(["gpio"], fetchGpios);
   if (isLoading) {
     return <div>Loading...</div>;
   }
