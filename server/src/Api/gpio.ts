@@ -21,4 +21,10 @@ gpios.get("/", async (req: Request, res: Response) => {
   }
 });
 
+gpios.post("/", async (req: Request, res: Response) => {
+  // const { name, available, windows } = req.body;
+  console.log(req.body);
+  res.json(req.body);
+});
+
 export { gpios };

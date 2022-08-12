@@ -1,29 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
-import { GpiosApi } from "../../@Types";
-import { fetchGpios } from "../../Api";
+import axios from "axios";
 
+import { GpiosApi } from "../../@Types";
+import { fetchGpios, myAxios } from "../../Api";
 import Button from "../Ui/Button/Button";
 import Select from "../Ui/Select";
 
 type Props = {
   close?: () => void;
 };
-
-// const gpio = [
-//   { value: "22", label: "Gpio 22" },
-//   { value: "23", label: "Gpio 23" },
-//   { value: "24", label: "Gpio 24" },
-//   { value: "25", label: "Gpio 25" },
-//   { value: "26", label: "Gpio 26" },
-//   { value: "27", label: "Gpio 27" },
-//   { value: "28", label: "Gpio 28" },
-//   { value: "29", label: "Gpio 29" },
-// ];
-// const windowNo = [
-//   { value: "1", label: "Window 1" },
-//   { value: "2", label: "Window 2" },
-//   { value: "3", label: "Window 3" },
-// ];
 
 const parseGpios = (data: GpiosApi[]) => {
   return data.map((item) => {
@@ -45,13 +30,24 @@ const parseWindows = (data: GpiosApi[]) => {
       index === self.findIndex((item) => item.value === value.value)
   );
 };
+const handelSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+  const form = new FormData(e.target as HTMLFormElement);
+  console.log();
+  // @ts-ignore
+  // axios.post("http://localhost:3001/api/gpios", form, {
+  //   headers: { "content-type": "application/x-www-form-urlencoded" },
+  //   data: form,
+  // });
+};
 const ConsoleForm = ({ close }: Props) => {
   const { data, isLoading } = useQuery(["gpio"], fetchGpios);
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
   return (
-    <form className="console-form">
+    <form className="console-form" onSubmit={handelSubmit}>
       <label htmlFor="windows-no">Windows NO</label>
       <Select name="windows-no" options={parseWindows(data!)} required />
 
