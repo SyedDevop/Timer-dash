@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 type Props = {};
 
 const Home = (props: Props) => {
-  const { data } = useQuery(["console"], fetchConsoles);
+  const { data } = useQuery(["consoles"], fetchConsoles);
   return (
     <div className="container grid">
       {data?.map((console, index) => (

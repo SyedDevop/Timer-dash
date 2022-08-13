@@ -1,8 +1,8 @@
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { ConsolesApi } from "../../@Types";
 
-import { GpiosApi } from "../../@Types";
-import { fetchGpios, myAxios } from "../../Api";
+import { fetchGpios, postConsole } from "../../Api";
+import { parseGpios, parseWindows, parseConsoleFormData } from "../../Utils";
 import Button from "../Ui/Button/Button";
 import Select from "../Ui/Select";
 
@@ -10,42 +10,31 @@ type Props = {
   close?: () => void;
 };
 
-const parseGpios = (data: GpiosApi[]) => {
-  return data.map((item) => {
-    return {
-      value: item.io.toString(),
-      label: `Gpio ${item.io}`,
-    };
-  });
-};
-const parseWindows = (data: GpiosApi[]) => {
-  const windows = data.map((item) => {
-    return {
-      value: item.windows?.id.toString() || "",
-      label: `Window ${item.windows?.id}`,
-    };
-  });
-  return windows.filter(
-    (value, index, self) =>
-      index === self.findIndex((item) => item.value === value.value)
-  );
-};
-const handelSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-  e.preventDefault();
-  const form = new FormData(e.target as HTMLFormElement);
-  console.log();
-  // @ts-ignore
-  // axios.post("http://localhost:3001/api/gpios", form, {
-  //   headers: { "content-type": "application/x-www-form-urlencoded" },
-  //   data: form,
-  // });
-};
 const ConsoleForm = ({ close }: Props) => {
   const { data, isLoading } = useQuery(["gpio"], fetchGpios);
-
+  const queryClient = useQueryClient();
+  const { mutate } = useMutation(
+    (newTodo: Omit<ConsolesApi, "id">) => {
+      return postConsole(newTodo);
+    },
+    {
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(["consoles"]);
+        console.log("success");
+        close && close();
+      },
+    }
+  );
   if (isLoading) {
     return <div>Loading...</div>;
   }
+  const handelSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = new FormData(e.currentTarget);
+    const data = parseConsoleFormData(form);
+    mutate(data);
+  };
+
   return (
     <form className="console-form" onSubmit={handelSubmit}>
       <label htmlFor="windows-no">Windows NO</label>
