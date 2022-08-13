@@ -11,5 +11,6 @@ export const log = Logger({
   base: {
     pid: false,
   },
+
   timestamp: () => `,"time":"${dayjs().format()}"`,
 });
