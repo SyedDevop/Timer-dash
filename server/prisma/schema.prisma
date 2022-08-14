@@ -30,7 +30,7 @@ model Gpio {
   id        Int      @id @unique @default(autoincrement())
   io        Int      @unique
   available Boolean  @default(true)
-  Console   Console? @relation(fields: [consoleId], references: [id])
+  Console   Console? @relation(fields: [consoleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   consoleId String?  @unique
   windows   Windows? @relation(fields: [windowsId], references: [id])
   windowsId Int?
