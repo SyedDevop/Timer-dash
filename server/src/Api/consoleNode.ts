@@ -1,15 +1,13 @@
 import { Router } from "express";
 
 import prisma from "../prisma";
-import { log } from "../logger";
-import { ConsoleSchema } from "../Schema/console.schema";
-import { $exists } from "../Utils/Prisma.utils";
 import { onErrors } from "../Error/base.error";
 import {
   handelConsoleCreate,
   handelConsoleDelete,
-  validateBodyData,
+  handelConsoleUpdate,
 } from "../functions";
+import { validGetConsoleData, validUpdateConsoleData } from "../Validation";
 
 const consoleNode = Router();
 
@@ -18,9 +16,9 @@ consoleNode.get("/", async ({ query }, res) => {
     const include =
       query.gpio === "true" ? { include: { Gpio: true } } : undefined;
     const console = await prisma.console.findMany(include);
-    res.json(console);
+    return res.json(console);
   } catch (error) {
-    res.json(error);
+    return res.json(error);
   } finally {
     await prisma.$disconnect();
   }
@@ -28,20 +26,39 @@ consoleNode.get("/", async ({ query }, res) => {
 // Create a new console
 consoleNode.post("/", async ({ body }, res) => {
   try {
-    const data = await validateBodyData(body);
+    const data = await validGetConsoleData(body);
     await handelConsoleCreate(data);
     return res.json({ status: 200, message: "Console created" });
-  } catch (err: any) {
-    onErrors(err, res);
+  } catch (error: any) {
+    return onErrors(error, res);
+  } finally {
+    await prisma.$disconnect();
   }
 });
+
+// Update a console
+consoleNode.patch("/:id", async ({ body, params }, res) => {
+  const { id } = params;
+  const reqData = body;
+  try {
+    const data = await validUpdateConsoleData(reqData);
+    return await handelConsoleUpdate(id, data, res);
+  } catch (error) {
+    return onErrors(error, res);
+  } finally {
+    await prisma.$disconnect();
+  }
+});
+
 // Delete a console
 consoleNode.delete("/:id", async ({ params }, res) => {
   try {
     const { id } = params;
     return await handelConsoleDelete(id, res);
-  } catch (err: any) {
-    onErrors(err, res);
+  } catch (error: any) {
+    return onErrors(error, res);
+  } finally {
+    await prisma.$disconnect();
   }
 });
 
