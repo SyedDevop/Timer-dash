@@ -3,7 +3,7 @@
     color: #4f4f4f;
   }
   h2,
-  button {
+  button  {
     color: var(--clr-white);
   }
   span,
@@ -12,13 +12,11 @@
   }
 }
 @mixin btn-style {
-  button {
-    border: none;
-    padding: 0;
-    background-color: transparent;
-    height: fit-content;
-    transition: all 250ms ease-in-out;
-  }
+  border: none;
+  padding: 0;
+  background-color: transparent;
+  height: fit-content;
+  transition: all 250ms ease-in-out;
 }
 
 .card-tab {
@@ -30,8 +28,10 @@
   padding: 20px var(--padding-lr);
   border-radius: 20px;
   @include text-style;
-  @include btn-style;
 
+  .console-btn {
+    @include btn-style;
+  }
   &__head {
     display: flex;
     justify-content: space-between;
@@ -73,6 +73,7 @@
     }
     > button {
       position: absolute;
+      padding: 0;
       bottom: -30px;
       left: 50%;
       z-index: 10;
@@ -140,7 +141,6 @@
   height: 75px;
   width: 100%;
   display: grid;
-  // place-content: center;
   align-content: center;
   form {
     display: flex;

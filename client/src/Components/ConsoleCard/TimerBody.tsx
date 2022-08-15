@@ -1,10 +1,9 @@
 import { useCallback } from "react";
 
-import { AddMinutes } from "./AddMinutes";
 import { TimerBodyProps } from "../../@Types";
-import { TimeBlock } from "./TimeBlock";
 import { useTimerBody } from "./useTimerBody";
-import { TimerButton } from "./TimerButton";
+
+import { TimerButton, TimeBlock, AddMinutes } from ".";
 
 export const TimerBody = ({ timeID, index }: TimerBodyProps) => {
   const {
@@ -22,7 +21,9 @@ export const TimerBody = ({ timeID, index }: TimerBodyProps) => {
   const submit = useCallback(
     (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
       handelClick(e);
-    },[]);
+    },
+    []
+  );
 
   const reset = useCallback(() => {
     timeReset();

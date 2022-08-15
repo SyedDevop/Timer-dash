@@ -24,3 +24,8 @@ export const postConsole = async (data: Omit<ConsolesApi, "id">) => {
   const res = await myAxios.post<ConsolesApi>("/consoles", data);
   return res.data;
 };
+
+export const deleteConsole = async (id: string) => {
+  const res = await myAxios.delete(`/consoles/${id}`);
+  return res.data;
+};
