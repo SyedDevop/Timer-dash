@@ -15,6 +15,7 @@ export const validUpdateConsoleData = async (data: any) => {
   try {
     const valid = await updateConsoleSchema.validate(data, {
       abortEarly: false,
+      stripUnknown: true,
     });
     return valid;
   } catch (error) {
