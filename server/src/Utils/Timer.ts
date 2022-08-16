@@ -1,8 +1,7 @@
 import Timer, { TimerEventType } from "easytimer.js";
+
 import { log } from "../logger";
-// import { PrismaClient } from "@prisma/client";
 import Prisma from "../prisma";
-// import { IMyTimer, UpdateTImerType } from "../@types/Timer";
 
 export type UpdateTImerType =
   | "secondsUpdated"
@@ -12,7 +11,9 @@ export type setTimerActionsType = "start" | "pause" | "reset";
 class MyTimer {
   timer: { [key: string]: Timer };
   timerName: { [key: string]: string | null };
+  public static instance: MyTimer;
   constructor() {
+    MyTimer.instance = this;
     this.timer = {};
     this.timerName = {};
     this.init();
@@ -91,14 +92,6 @@ class MyTimer {
     return this.timer[timerId].isRunning();
   }
 
-  // public unSubscribe(event: TimerEventType) {
-  //   for (const timer in this.timer) {
-  //     this.timer[timer].removeEventListener(event, () => {
-  //       console.log("unsubscribe");
-  //     });
-  //   }
-  // }
-
   public addEventListener(
     event: TimerEventType,
     id: string,
@@ -112,10 +105,10 @@ class MyTimer {
     });
   }
 
-  public test() {
+  public allTargetAchievedEventListener() {
     for (const timer in this.timer) {
       this.timer[timer].addEventListener("targetAchieved", () => {
-        log.info(this.timerName[timer], "done");
+        log.info(this.timerName[timer] + " done");
       });
     }
   }
