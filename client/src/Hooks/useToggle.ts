@@ -2,7 +2,10 @@ import { useCallback, useState } from "react";
 
 // Hook
 // Parameter is the boolean, with default "false" value
-const useToggle = (initialState: boolean = false): [boolean, any] => {
+// Return is an array with two elements:
+// - The boolean value
+// - The function to change the boolean value
+const useToggle = (initialState: boolean = false): [boolean, () => void] => {
   // Initialize the state
   const [state, setState] = useState<boolean>(initialState);
 

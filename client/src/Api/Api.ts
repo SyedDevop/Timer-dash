@@ -29,3 +29,8 @@ export const deleteConsole = async (id: string) => {
   const res = await myAxios.delete(`/consoles/${id}`);
   return res.data;
 };
+
+export const updateConsole = async (id: string, data: Partial<ConsolesApi>) => {
+  const res = await myAxios.patch(`/consoles/${id}`, data);
+  return res.data;
+};

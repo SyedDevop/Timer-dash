@@ -1,44 +1,45 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ConsolesApi } from "../../@Types";
-
-import { fetchGpios, postConsole } from "../../Api";
-import { parseGpios, parseWindows, parseConsoleFormData } from "../../Utils";
+import { parseGpios, parseWindows } from "../../Utils";
 import Button from "../Ui/Button/Button";
 import Select from "../Ui/Select";
+import { useConsoleForm, ActionType } from "./useConsoleForm";
 
 type Props = {
   close?: () => void;
+  okButtonText: string;
+  cancelButtonText: string;
+  consoleRequired: boolean;
+  gpioRequired: boolean;
+  windowRequired: boolean;
+  actionType: ActionType;
 };
 
-const ConsoleForm = ({ close }: Props) => {
-  const { data, isLoading } = useQuery(["gpio"], fetchGpios);
-  const queryClient = useQueryClient();
-  const { mutate } = useMutation(
-    (newTodo: Omit<ConsolesApi, "id">) => {
-      return postConsole(newTodo);
-    },
-    {
-      onSuccess: async () => {
-        await queryClient.invalidateQueries(["consoles"]);
-        console.log("success");
-        close && close();
-      },
-    }
-  );
+const ConsoleForm = ({
+  close,
+  cancelButtonText,
+  okButtonText,
+  consoleRequired,
+  gpioRequired,
+  windowRequired,
+  actionType,
+}: Props) => {
+  const { data, handelFormSubmit, isLoading } = useConsoleForm({
+    closeForm: close,
+    actionType,
+  });
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
-  const handelSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const form = new FormData(e.currentTarget);
-    const data = parseConsoleFormData(form);
-    mutate(data);
-  };
 
   return (
-    <form className="console-form" onSubmit={handelSubmit}>
+    <form className="console-form" onSubmit={handelFormSubmit}>
       <label htmlFor="windows-no">Windows NO</label>
-      <Select name="windows-no" options={parseWindows(data!)} required />
+      <Select
+        name="windows-no"
+        options={parseWindows(data!)}
+        required={windowRequired}
+        placeHolder={!windowRequired}
+      />
 
       <label htmlFor="console-name">Console Name</label>
       <input
@@ -46,19 +47,32 @@ const ConsoleForm = ({ close }: Props) => {
         name="console-name"
         id="console-name"
         className="primary__input"
-        required
+        required={consoleRequired}
       />
 
       <label htmlFor="gpio-no">Gpio No</label>
-      <Select name="gpio-no" options={parseGpios(data!)} required />
+      <Select
+        name="gpio-no"
+        options={parseGpios(data!)}
+        required={gpioRequired}
+        placeHolder={!gpioRequired}
+      />
       <div className="btn-container">
-        <Button type="submit">create</Button>
+        <Button type="submit">{okButtonText}</Button>
         <Button textColor="red" onClick={close}>
-          cancel
+          {cancelButtonText}
         </Button>
       </div>
     </form>
   );
+};
+
+ConsoleForm.defaultProps = {
+  cancelButtonText: "cancel",
+  okButtonText: "create",
+  consoleRequired: true,
+  gpioRequired: true,
+  windowRequired: true,
 };
 
 export default ConsoleForm;

@@ -15,7 +15,7 @@ const Nav = () => {
         <AddCircle />
       </button>
       <Modal state={modalToggle} toggleModuleState={toggleModule}>
-        <ConsoleForm close={toggleModule} />
+        <ConsoleForm close={toggleModule} actionType={{ type: "POST" }} />
       </Modal>
     </nav>
   );

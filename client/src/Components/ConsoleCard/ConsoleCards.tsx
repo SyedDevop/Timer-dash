@@ -1,8 +1,5 @@
-import React from "react";
-
-import { MenuIcon } from "../../Assets";
 import { ConsolesApi } from "../../@Types";
-import { ConsoleDeleteButton, TimerBody } from ".";
+import { ConsoleDeleteButton, TimerBody, ConsoleMenu } from ".";
 
 interface ConsoleCarsProps extends ConsolesApi {
   index: number;
@@ -15,9 +12,7 @@ const ConsoleCars = ({ name, id, index }: ConsoleCarsProps) => {
           <h4>Timer</h4>
           <h2>{name}</h2>
         </div>
-        <button aria-label="console car setting" className="console-btn">
-          <MenuIcon />
-        </button>
+        <ConsoleMenu consoleID={id} consoleName={name} />
       </div>
       <TimerBody timeID={id} index={index} />
       <ConsoleDeleteButton consoleID={id} consoleName={name} />

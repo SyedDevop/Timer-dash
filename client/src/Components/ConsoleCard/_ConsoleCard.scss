@@ -3,7 +3,7 @@
     color: #4f4f4f;
   }
   h2,
-  button  {
+  button {
     color: var(--clr-white);
   }
   span,
@@ -35,7 +35,7 @@
   &__head {
     display: flex;
     justify-content: space-between;
-    button {
+    > button {
       cursor: pointer;
       svg {
         fill: var(--clr-primary-300);
