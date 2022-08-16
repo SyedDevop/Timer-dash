@@ -19,11 +19,9 @@ export const handelPrismaError = (
   err: PrismaClientKnownRequestError,
   res: Response
 ) => {
-  const { code, name, meta } = err;
+  const { message } = err;
   log.error(err);
-  return res
-    .status(400)
-    .json({ status: 400, message: [meta, { code }, { name }] });
+  return res.status(400).json({ error: { status: "failed", message } });
 };
 
 export const handelYupError = (err: ValidationError, res: Response) => {
