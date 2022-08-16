@@ -2,10 +2,10 @@ import { Server, Socket } from "socket.io";
 import { log } from "./logger";
 import MyTimer, { setTimerActionsType } from "./Utils/Timer";
 
-interface SetNode {
-  gpio: number;
-  value: "HIGH" | "LOW";
-}
+// interface SetNode {
+//   gpio: number;
+//   value: "HIGH" | "LOW";
+// }
 
 const EVENTS = {
   SET_NODE: "SET_NODE",
@@ -18,9 +18,9 @@ const EVENTS = {
 
 const sockets = ({ io }: { io: Server }) => {
   log.info("Socket enabled");
-  const timer = new MyTimer();
+  const timer = MyTimer.instance;
   setTimeout(() => {
-    timer.test();
+    timer.allTargetAchievedEventListener();
   }, 1000);
   io.on("connection", (socket) => {
     log.info(`User connected ID: ${socket.id}`);

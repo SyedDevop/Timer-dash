@@ -1,4 +1,4 @@
-import { Prisma, Console, Gpio, Windows } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import { Router, Request, Response } from "express";
 import prisma from "../prisma";
 

@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "type": "module",
   "repository": "https://github.com/SyedDevop/Timer-dash.git",
   "scripts": {
     "start": "ts-node-dev --respawn src/index.ts",
