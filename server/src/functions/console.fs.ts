@@ -15,7 +15,9 @@ export const handelConsoleCreate = async (data: {
           io: data.gpio,
         },
       })
-      .then($exists);
+      .then((gpio) =>
+        $exists(gpio, `No gpio found with this io: ${data.gpio}`)
+      );
     const resConsole = await prisma.console.create({
       data,
     });

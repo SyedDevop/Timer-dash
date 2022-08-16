@@ -2,11 +2,10 @@
  * Determines whether something exists.
  * @param ts
  */
-export function $exists<T>(ts: T[]) {
+export function $exists<T>(ts: T[], message?: string) {
   const exists = ts.length > 0;
-  //   return new $existsClass(exists, exists ? "" : "No data found");
-  //   return { exists, messages: exists ? "" : "No data found" };
+  const msg = message === undefined ? "No data found 1" : message;
   if (!exists) {
-    throw new Error("No Gpio found");
+    throw new Error(msg);
   }
 }
