@@ -18,7 +18,7 @@ export const Modal: FC<Props> = ({ toggleModuleState, state, children }) => {
   return (
     <CSSTransition
       in={state}
-      timeout={100}
+      timeout={600}
       classNames="modal"
       unmountOnExit
       mountOnEnter
@@ -29,7 +29,7 @@ export const Modal: FC<Props> = ({ toggleModuleState, state, children }) => {
             <button type="button" className="body-close-btn" onClick={close}>
               <CloseIcon className="close-icon" />
             </button>
-            {children}
+            <div className="modal__body__content">{children}</div>
           </div>
         </main>
       </>

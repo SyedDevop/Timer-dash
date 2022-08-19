@@ -1,8 +1,11 @@
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import Nav from "./Components/Nav/Nav";
 import SocketProvider from "./Hooks/useSocketContext";
-import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import Home from "./Pages/Home";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 const queryClient = new QueryClient();
 
@@ -13,6 +16,7 @@ function App() {
         <QueryClientProvider client={queryClient}>
           <Nav />
           <Home />
+          <ToastContainer theme="dark" position="top-center" />
           <ReactQueryDevtools />
         </QueryClientProvider>
       </SocketProvider>

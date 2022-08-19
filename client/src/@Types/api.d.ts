@@ -18,3 +18,10 @@ export interface WindowsApi {
   id: number;
   name: string | null;
 }
+
+export interface ResponseError {
+  error: {
+    status: string;
+    message: string[];
+  };
+}
