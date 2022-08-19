@@ -11,16 +11,16 @@ datasource db {
 }
 
 model Console {
-  id        String   @id @default(cuid())
+  id        String   @id @unique @default(cuid())
   gpio      Int      @unique
-  name      String
+  name      String   @unique
   Windows   Windows? @relation(fields: [windowsId], references: [id])
   windowsId Int?
   Gpio      Gpio?
 }
 
 model Windows {
-  id      Int       @id @default(autoincrement())
+  id      Int       @id @unique @default(autoincrement())
   name    String?   @unique
   console Console[]
   Gpio    Gpio[]
