@@ -22,6 +22,7 @@
     "react-hotkeys-hook": "^3.4.6",
     "react-select": "^5.4.0",
     "react-timer-hook": "^3.0.5",
+    "react-toastify": "^9.0.8",
     "react-transition-group": "^4.4.2",
     "sass": "^1.51.0",
     "socket.io-client": "^4.5.1",
