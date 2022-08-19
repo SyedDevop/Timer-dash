@@ -11,3 +11,7 @@ export const convertFD2JSON = (data: FormData) => {
   }
   return object;
 };
+
+export const delay = (ms: number) => {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+};

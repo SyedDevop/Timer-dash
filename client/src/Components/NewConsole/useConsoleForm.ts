@@ -4,7 +4,7 @@ import { AxiosError } from "axios";
 
 import { ConsolesApi, ResponseError } from "../../@Types";
 import { fetchGpios, postConsole, updateConsole } from "../../Api";
-import { parseConsoleFormData } from "../../Utils";
+import { delay, parseConsoleFormData } from "../../Utils";
 
 type postConsoleType = { type: "POST" };
 type deleteConsoleType = { type: "DELETE" };
@@ -34,6 +34,12 @@ export const useConsoleForm = ({
     },
     {
       onSuccess: async (_, { toastId }) => {
+        if (actionType.type === "POST") {
+          await fetch("http://localhost:3001/restart", { method: "GET" }).catch(
+            (err) => console.error("restarted")
+          );
+          delay(1000);
+        }
         handelSuccessToast(toastId, actionType);
         await queryClient.invalidateQueries(["consoles"]);
         console.log("success");
