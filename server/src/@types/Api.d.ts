@@ -22,3 +22,10 @@ export interface ConsoleApi {
     };
   };
 }
+
+export interface ResponseError {
+  error: {
+    status: string;
+    message: string[];
+  };
+}
