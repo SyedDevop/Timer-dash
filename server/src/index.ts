@@ -6,7 +6,7 @@ import cors from "cors";
 import { log } from "./logger";
 import sockets from "./socket";
 import routes from "./routes";
-import Timer from "./Utils/Timer";
+
 
 const PORT = process.env.PORT || 3001;
 
@@ -25,7 +25,6 @@ const io = new Server(server, {
 
 server.listen(PORT, () => {
   log.info(`Server is running on port ${PORT}`);
-  new Timer();
   sockets({ io });
   routes(app);
 });

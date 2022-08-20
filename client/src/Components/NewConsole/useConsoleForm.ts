@@ -5,6 +5,7 @@ import { AxiosError } from "axios";
 import { ConsolesApi, ResponseError } from "../../@Types";
 import { fetchGpios, postConsole, updateConsole } from "../../Api";
 import { delay, parseConsoleFormData } from "../../Utils";
+import { useSocketContext } from "../../Hooks";
 
 type postConsoleType = { type: "POST" };
 type deleteConsoleType = { type: "DELETE" };
@@ -24,6 +25,7 @@ export const useConsoleForm = ({
 }: UseConsoleFormProps) => {
   const { data, isLoading } = useQuery(["gpio"], fetchGpios);
   const queryClient = useQueryClient();
+  const { socket } = useSocketContext();
 
   const { mutate } = useMutation(
     ({ data }: { data: Omit<ConsolesApi, "id">; toastId: number | string }) => {
@@ -35,10 +37,7 @@ export const useConsoleForm = ({
     {
       onSuccess: async (_, { toastId }) => {
         if (actionType.type === "POST") {
-          await fetch("http://localhost:3001/restart", { method: "GET" }).catch(
-            (err) => console.error("restarted")
-          );
-          delay(1000);
+          socket.emit("RESTART_TIMER");
         }
         handelSuccessToast(toastId, actionType);
         await queryClient.invalidateQueries(["consoles"]);
@@ -55,13 +54,17 @@ export const useConsoleForm = ({
           })
         );
       },
+      onSettled: async () => {
+        if (actionType.type === "POST") {
+          await delay(2000);
+          location.reload();
+        }
+      },
     }
   );
   const handelFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const toastId = toast.loading("Saving...", {
-      updateId: SAVE_TOAST_ID,
-    });
+    const toastId = toast.loading("Saving...");
     const form = new FormData(e.currentTarget);
     const data = parseConsoleFormData(form);
     mutate({ data, toastId });

@@ -105,6 +105,12 @@ class MyTimer {
     });
   }
 
+  public removeAllListeners() {
+    for (const timer in this.timer) {
+      this.timer[timer].removeAllEventListeners();
+    }
+  }
+
   public allTargetAchievedEventListener() {
     for (const timer in this.timer) {
       this.timer[timer].addEventListener("targetAchieved", () => {

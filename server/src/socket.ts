@@ -14,11 +14,12 @@ const EVENTS = {
   SET_TIMER_ACTION: "SET_TIMER_ACTION",
   GET_TIMER_STATE: "GET_TIMER_STATE",
   START_TIMER: "START_TIMER",
+  RESTART_TIMER: "RESTART_TIMER",
 };
 
 const sockets = ({ io }: { io: Server }) => {
   log.info("Socket enabled");
-  const timer = MyTimer.instance;
+  let timer = new MyTimer();
   setTimeout(() => {
     timer.allTargetAchievedEventListener();
   }, 1000);
@@ -36,18 +37,9 @@ const sockets = ({ io }: { io: Server }) => {
       });
     }
 
-    timer.getUpdateTimers("secondsUpdated", (id) => {
-      socket.emit(`${id}seconds`, timer.currentTimersTime[id].seconds);
-    });
-    timer.getUpdateTimers("hoursUpdated", (id) => {
-      socket.emit(`${id}hours`, timer.currentTimersTime[id].hours);
-    });
-    timer.getUpdateTimers("minutesUpdated", (id) => {
-      socket.emit(`${id}minutes`, timer.currentTimersTime[id].minute);
-    });
-    timer.getUpdateTimers("targetAchieved", (id, currentState) => {
-      io.emit(`${id}state`, currentState);
-    });
+    // Get all the current timers state and time.
+    getUpdateTimers(timer, socket, io);
+    
     // Event to handel pause, play and reset
     socket.on(
       EVENTS.SET_TIMER_ACTION,
@@ -69,6 +61,17 @@ const sockets = ({ io }: { io: Server }) => {
         emitCurrentTime(socket, timerID, timer);
       }
     );
+    // Restart the Timers with updated console
+    socket.on(EVENTS.RESTART_TIMER, () => {
+      // remove all listeners
+      timer.removeAllListeners();
+      // create new timer
+      timer = new MyTimer();
+      setTimeout(() => {
+        timer.allTargetAchievedEventListener();
+      }, 1000);
+    });
+
     // socket.on(EVENTS.SET_NODE, ({ gpio, value }: SetNode) => {});
   });
   // timer.test();
@@ -77,6 +80,21 @@ const sockets = ({ io }: { io: Server }) => {
 function emitCurrentTime(socket: Socket, timerId: string, timer: MyTimer) {
   socket.emit(`${timerId}minutes`, timer.currentTimersTime[timerId].minute);
   socket.emit(`${timerId}hours`, timer.currentTimersTime[timerId].hours);
+}
+
+function getUpdateTimers(timer: MyTimer, socket: Socket, io: Server) {
+  timer.getUpdateTimers("secondsUpdated", (id) => {
+    socket.emit(`${id}seconds`, timer.currentTimersTime[id].seconds);
+  });
+  timer.getUpdateTimers("hoursUpdated", (id) => {
+    socket.emit(`${id}hours`, timer.currentTimersTime[id].hours);
+  });
+  timer.getUpdateTimers("minutesUpdated", (id) => {
+    socket.emit(`${id}minutes`, timer.currentTimersTime[id].minute);
+  });
+  timer.getUpdateTimers("targetAchieved", (id, currentState) => {
+    io.emit(`${id}state`, currentState);
+  });
 }
 
 export default sockets;
