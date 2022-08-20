@@ -39,7 +39,7 @@ const sockets = ({ io }: { io: Server }) => {
 
     // Get all the current timers state and time.
     getUpdateTimers(timer, socket, io);
-    
+
     // Event to handel pause, play and reset
     socket.on(
       EVENTS.SET_TIMER_ACTION,
@@ -66,7 +66,7 @@ const sockets = ({ io }: { io: Server }) => {
       // remove all listeners
       timer.removeAllListeners();
       // create new timer
-      timer = new MyTimer();
+      timer = new MyTimer({ presetTimers: timer.timer });
       setTimeout(() => {
         timer.allTargetAchievedEventListener();
       }, 1000);

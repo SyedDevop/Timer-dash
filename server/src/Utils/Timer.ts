@@ -8,17 +8,21 @@ export type UpdateTImerType =
   | "minutesUpdated"
   | "hoursUpdated";
 export type setTimerActionsType = "start" | "pause" | "reset";
+
+export interface TimerOptions {
+  presetTimers?: Record<string, Timer>;
+}
 class MyTimer {
   timer: { [key: string]: Timer };
   timerName: { [key: string]: string | null };
   public static instance: MyTimer;
-  constructor() {
+  constructor({ presetTimers }: TimerOptions = {}) {
     MyTimer.instance = this;
     this.timer = {};
     this.timerName = {};
-    this.init();
+    this.init({ presetTimers });
   }
-  private async init() {
+  private async init({ presetTimers }: TimerOptions) {
     try {
       const data = await Prisma.console.findMany();
       for (let console of data) {
@@ -26,6 +30,9 @@ class MyTimer {
           countdown: true,
         });
         this.timerName[console.id] = console.name;
+      }
+      if (presetTimers !== undefined) {
+        this.timer = { ...this.timer, ...presetTimers };
       }
       return this.timer;
     } catch (error) {
