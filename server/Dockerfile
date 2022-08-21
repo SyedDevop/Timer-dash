@@ -1,7 +1,7 @@
 FROM node:16.13-alpine as build
 
 LABEL version="1.0.0"
-LABEL description="Timer dash frountend app."
+LABEL description="Timer dash api server."
 
 # set the working directory to the root of the project
 WORKDIR /app
@@ -15,16 +15,14 @@ RUN npm install
 
 RUN npm run build
 
+# migrate prisma database
+RUN npm run prisma-migrate
+RUN npm run prisma-migrate-production
+
+# strat the server
+EXPOSE 3001
+CMD ["node", "lib/index.js"]
+
 # copy the build output to the container
-# COPY ./build/ /app/build/
+# CMD [ "npx", "pm2", "start", "--name", "timer-api", "--", "npm", "start" ]
 
-# prepare nginx
-FROM nginx:alpine
-# EXPOSE 3000
-COPY --from=build /app/dist/ /usr/share/nginx/html/
-RUN rm /etc/nginx/conf.d/default.conf
-COPY nginx/nginx.conf /etc/nginx/conf.d
-
-# fire up nginx
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
