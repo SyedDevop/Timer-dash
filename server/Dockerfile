@@ -2,6 +2,7 @@ FROM node:16.13-alpine as builder
 
 LABEL version="1.1.0"
 LABEL description="Timer dash api server."
+ARG name="Timer_dash_server"
 
 WORKDIR /app
 COPY package.json ./
@@ -19,7 +20,8 @@ RUN npm install --only=production
 COPY --from=builder /app/lib ./lib
 COPY --from=builder /app/prisma ./prisma
 RUN npx prisma generate
+RUN npm install pm2 -g
 EXPOSE 2050
-CMD ["node","./lib/index.js"]
+CMD ["pm2-runtime","./lib/index.js"]
 
 

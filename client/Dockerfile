@@ -2,7 +2,7 @@ FROM node:16.13-alpine as build
 
 LABEL version="1.0.0"
 LABEL description="Timer dash frountend app."
-
+ARG name="Timer_dash_client"
 # set the working directory to the root of the project
 WORKDIR /app
 
