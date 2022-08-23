@@ -7,7 +7,6 @@ import { log } from "./logger";
 import sockets from "./socket";
 import routes from "./routes";
 
-
 const PORT = process.env.PORT || 3001;
 
 const app = express();

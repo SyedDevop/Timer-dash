@@ -21,7 +21,7 @@ COPY --from=builder /app/lib ./lib
 COPY --from=builder /app/prisma ./prisma
 RUN npx prisma generate
 RUN npm install pm2 -g
-EXPOSE 2050
+EXPOSE 3000
 CMD ["pm2-runtime","./lib/index.js"]
 
 
