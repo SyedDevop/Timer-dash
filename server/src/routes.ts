@@ -12,7 +12,7 @@ export default (app: Express) => {
     res.json({ status: 200, message: "Restarting server" });
     process.exit(0);
   });
-  app.get("api/test", (_, res) => {
+  app.get("/api/test", (_, res) => {
     res.json({ status: 200, message: "working healthy" });
     process.exit(0);
   });

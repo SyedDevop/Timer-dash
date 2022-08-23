@@ -2,7 +2,7 @@ import axios from "axios";
 import { ConsolesApi, GpiosApi } from "../@Types";
 
 export const myAxios = axios.create({
-  baseURL: "http://localhost:3001/api",
+  baseURL: "/api",
 });
 
 type FetchConsoles = Array<ConsolesApi & { Gpio: GpiosApi }>;
