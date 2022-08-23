@@ -1,5 +1,4 @@
-import { PrismaClient } from "@prisma/client";
-
+const { PrismaClient } = require("@prisma/client");
 const consoles = [
   { gpio: 4, name: "Console Number 1", windowsId: 1 },
   { gpio: 17, name: "Console Number 2", windowsId: 1 },
