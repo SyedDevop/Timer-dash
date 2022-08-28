@@ -1,11 +1,8 @@
 version: '3.8'
 
-
-
 services:
-
-
   nginx:
+    container_name: tb-proxy
     depends_on:
       - api
       - client
@@ -17,22 +14,21 @@ services:
       - "80:80"
 
   api:
-    container_name: TImer_dash_server
+    container_name: tb-server
+    restart: unless-stopped
     build:
       dockerfile: Dockerfile
       context: "./server"
-    volumes:
-      - /app/node_modules
-      - ./server:/app
     environment:
-      - PORT=5000
+      NODE_ENV: production
+      PORT : 5000
 
   client:
-    container_name: Timer_dash_client
+    container_name: tb-client
     stdin_open: true
+    restart: unless-stopped
     build:
       dockerfile: Dockerfile
       context: ./client
-    volumes:
-      - /app/node_modules
-      - ./client:/app
+    environment:
+        NODE_ENV: production

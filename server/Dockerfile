@@ -8,7 +8,7 @@ WORKDIR /app
 COPY package.json ./
 RUN npm install 
 COPY . .
-RUN npx prisma generate
+RUN npx prisma migrate dev --name "init"
 RUN npm run build
 
 ## this is stage two , where the app actually runs
@@ -20,8 +20,9 @@ RUN npm install --only=production
 COPY --from=builder /app/lib ./lib
 COPY --from=builder /app/prisma ./prisma
 RUN npx prisma generate
+RUN npx prisma migrate deploy
 RUN npm install pm2 -g
-EXPOSE 3000
+EXPOSE 5000
 CMD ["pm2-runtime","./lib/index.js"]
 
 
