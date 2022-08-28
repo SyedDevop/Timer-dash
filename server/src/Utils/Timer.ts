@@ -13,15 +13,13 @@ export interface TimerOptions {
   presetTimers?: Record<string, Timer>;
 }
 class MyTimer {
-  timer: { [key: string]: Timer };
-  timerName: { [key: string]: string | null };
-  public static instance: MyTimer;
+  timer: { [key: string]: Timer } = {};
+  timerName: { [key: string]: string | null } = {};
+
   constructor({ presetTimers }: TimerOptions = {}) {
-    MyTimer.instance = this;
-    this.timer = {};
-    this.timerName = {};
     this.init({ presetTimers });
   }
+
   private async init({ presetTimers }: TimerOptions) {
     try {
       const data = await Prisma.console.findMany();
