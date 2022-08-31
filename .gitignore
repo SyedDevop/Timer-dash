@@ -8,6 +8,7 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
+yarn.lock*
 dist
 dist-ssr
 *.local
@@ -27,3 +28,4 @@ dist-ssr
 /server/prisma/migrations
 /server/prisma/timer.db
 /server/prisma/timer.db-journal
+/server/yarn.lock
