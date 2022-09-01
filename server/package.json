@@ -7,7 +7,7 @@
   "scripts": {
     "start": "ts-node-dev --respawn src/index.ts",
     "build": "tsc",
-    "prisma-migrate": "prisma migrate dev name init",
+    "prisma-migrate": "prisma migrate dev --name init",
     "prisma-migrate-production": "prisma migrate deploy"
   },
   "prisma": {

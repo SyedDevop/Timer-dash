@@ -6,9 +6,9 @@ ARG name="Timer_dash_server"
 
 WORKDIR /app
 COPY package.json ./
-RUN npm install 
+RUN npm install
 COPY . .
-RUN npx prisma migrate dev --name "init"
+RUN npm run prisma-migrate
 RUN npm run build
 
 ## this is stage two , where the app actually runs
