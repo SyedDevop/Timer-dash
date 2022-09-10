@@ -19,6 +19,8 @@ services:
     build:
       dockerfile: Dockerfile
       context: "./server"
+    volumes:
+      - prisma:/app/prisma
     environment:
       NODE_ENV: production
       PORT : 5000
@@ -32,3 +34,5 @@ services:
       context: ./client
     environment:
         NODE_ENV: production
+volumes:
+  prisma:

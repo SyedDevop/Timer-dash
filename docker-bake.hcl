@@ -1,3 +1,31 @@
+variable "platforms" {
+  default = ["linux/arm64"]
+}
+
 group "default" {
-  platforms = ["linux/arm64","linux/arm64/v7","linux/am64"]
+  targets = [
+    "api",
+    "client",
+    "proxy"
+  ]
+  
+}
+
+target "client" {
+  dockerfile = "Dockerfile"
+  tags = ["syeddev/tb-client:latest"]
+  platforms = platforms
+  context = "./client"
+}
+target "api" {
+  dockerfile = "Dockerfile"
+  tags = ["syeddev/tb-server:latest"]
+  platforms = platforms
+  context = "./server"
+}
+target "proxy" {
+  dockerfile = "Dockerfile"
+  tags = ["syeddev/tb-proxy:latest"]
+  platforms = platforms
+  context = "./nginx"
 }
