@@ -1,5 +1,5 @@
 variable "platforms" {
-  default = ["linux/arm64"]
+  default = ["linux/arm64","linux/amd64"]
 }
 
 group "default" {
