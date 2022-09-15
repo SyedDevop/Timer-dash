@@ -15,3 +15,8 @@ export const convertFD2JSON = (data: FormData) => {
 export const delay = (ms: number) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
+
+export const isDev = () => {
+  // @ts-ignore
+  return !process.env.NODE_ENV || process.env.NODE_ENV === "development";
+};
