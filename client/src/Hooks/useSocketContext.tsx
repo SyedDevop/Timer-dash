@@ -1,7 +1,9 @@
 import { useContext, createContext } from "react";
 import io, { Socket } from "socket.io-client";
+import { isDev } from "../Utils";
 
-const socket = io({ path: "/socket.io" });
+const devPath = isDev() ? "http://localhost:3001" : { path: "/socket.io" };
+const socket = io(devPath);
 interface SocketContextValue {
   socket: Socket;
   startingData?: any;
